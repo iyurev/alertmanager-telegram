@@ -4,6 +4,7 @@ env:
   REGISTRY: docker.pkg.github.com
   IMAGE_NAME: prombot
   IMAGE_TAG: latest
+  QUAY_REPO: quay.io/kubernetes-operators
 on:
   push:
     paths:
@@ -19,8 +20,14 @@ jobs:
         run: docker login $REGISTRY  -u ${{ secrets.USERNAME }} -p ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build the Docker image
-        run: docker build --tag $REGISTRY/$GITHUB_REPOSITORY/$IMAGE_NAME:$IMAGE_TAG .
+        run: docker build --tag $REGISTRY/$GITHUB_REPOSITORY/$IMAGE_NAME:$IMAGE_TAG --tag $QUAY_REPO/$IMAGE_NAME:$IMAGE_TAG .
 
       - name: Push image
         run: docker push $REGISTRY/$GITHUB_REPOSITORY/$IMAGE_NAME:$IMAGE_TAG
+
+      - name: Get quay.io credentials
+        run: echo ${{ secret.QUAY_DOCKER_CFG }} > ~/.docker/config.json
+
+      - name: Push to quay.io
+        run: docker push $QUAY_REPO/$IMAGE_NAME:$IMAGE_TAG
 
