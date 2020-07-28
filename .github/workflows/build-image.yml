@@ -26,7 +26,7 @@ jobs:
         run: docker push $REGISTRY/$GITHUB_REPOSITORY/$IMAGE_NAME:$IMAGE_TAG
 
       - name: Get quay.io credentials
-        run: echo ${{ secrets.QUAY_DOCKER_CFG }} > ~/.docker/config.json
+        run: echo -n ${{ secrets.QUAY_DOCKER_CFG }} | base64 -d  > ~/.docker/config.json
 
       - name: Push to quay.io
         run: docker push $QUAY_REPO/$IMAGE_NAME:$IMAGE_TAG
