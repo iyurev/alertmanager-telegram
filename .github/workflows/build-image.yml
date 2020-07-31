@@ -16,18 +16,21 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Login to github docker registry
-        run: docker login $REGISTRY  -u ${{ secrets.USERNAME }} -p ${{ secrets.GITHUB_TOKEN }}
+      - name: Test ENV
+        run: echo ${GITHUB_ACTOR} && env
 
-      - name: Build the Docker image
-        run: docker build --tag $REGISTRY/$GITHUB_REPOSITORY/$IMAGE_NAME:$IMAGE_TAG --tag $QUAY_REPO/$IMAGE_NAME:$IMAGE_TAG .
-
-      - name: Push image
-        run: docker push $REGISTRY/$GITHUB_REPOSITORY/$IMAGE_NAME:$IMAGE_TAG
-
-      - name: Get quay.io credentials
-        run: echo -n ${{ secrets.QUAY_DOCKER_CFG }} | base64 -d  > ~/.docker/config.json
-
-      - name: Push to quay.io
-        run: docker push $QUAY_REPO/$IMAGE_NAME:$IMAGE_TAG
+#      - name: Login to github docker registry
+#        run: docker login $REGISTRY  -u ${{ secrets.USERNAME }} -p ${{ secrets.GITHUB_TOKEN }}
+#
+#      - name: Build the Docker image
+#        run: docker build --tag $REGISTRY/$GITHUB_REPOSITORY/$IMAGE_NAME:$IMAGE_TAG --tag $QUAY_REPO/$IMAGE_NAME:$IMAGE_TAG .
+#
+#      - name: Push image
+#        run: docker push $REGISTRY/$GITHUB_REPOSITORY/$IMAGE_NAME:$IMAGE_TAG
+#
+#      - name: Get quay.io credentials
+#        run: echo -n ${{ secrets.QUAY_DOCKER_CFG }} | base64 -d  > ~/.docker/config.json
+#
+#      - name: Push to quay.io
+#        run: docker push $QUAY_REPO/$IMAGE_NAME:$IMAGE_TAG
 

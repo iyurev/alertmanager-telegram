@@ -1,4 +1,5 @@
 FROM golang:1.14.4-alpine3.12 as builder
+
 RUN \
     cd / && \
     apk add --no-cache git ca-certificates make tzdata && \
