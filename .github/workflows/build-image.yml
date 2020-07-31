@@ -4,6 +4,7 @@ env:
   REGISTRY: docker.pkg.github.com
   IMAGE_NAME: prombot
   QUAY_REPO: quay.io/kubernetes-operators
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 on:
   push:
     paths:
@@ -11,19 +12,19 @@ on:
 
 jobs:
   build:
+    name: "Build Docker image"
     runs-on: ubuntu-latest
     steps:
-      - name: Default tag value
-        env:
-          IMAGE_TAG: ${GITHUB_REF##*/}
 
       - name: Setup main tag
-        env:
-          IMAGE_TAG: latest
-        if: ${{ github.ref == 'refs/heads/master' }}
+        run:  |
+          if [[ ${GITHUB_REF##*/} -eq "master" ]]; then
+          IMAGE_TAG=latest
+          else
+          IMAGE_TAG=${GITHUB_REF##*/}
+          fi
+          echo ${IMAGE_TAG}
 
-      - name: Check tag name
-        run: echo ${IMAGE_TAG}
 #
 #      - name: Login to github docker registry
 #        run: docker login $REGISTRY  -u ${GITHUB_ACTOR} -p ${{ secrets.GITHUB_TOKEN }}
