@@ -16,15 +16,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Setup main tag
-        run:  |
-          if [[ ${GITHUB_REF##*/} -eq "master" ]]; then
-          IMAGE_TAG=latest
-          else
-          IMAGE_TAG=${GITHUB_REF##*/}
-          fi
-          echo ${IMAGE_TAG}
+    - name: Checkout code
+      uses: actions/checkout@v2
 
+    - name: Build and push Docker image to GitHub package registry
+      uses: docker/build-push-action@v1
+      with:
+        username: ${GITHUB_ACTOR}
+        password: ${GITHUB_TOKEN}
+        registry: $REGISTRY
+        repository: $GITHUB_REPOSITORY/$IMAGE_NAME
+        tag_with_ref: true
+        tag_with_sha: true
 #
 #      - name: Login to github docker registry
 #        run: docker login $REGISTRY  -u ${GITHUB_ACTOR} -p ${{ secrets.GITHUB_TOKEN }}
