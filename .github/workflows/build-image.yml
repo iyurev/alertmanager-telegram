@@ -16,14 +16,18 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Test ENV
-        run: echo ${GITHUB_ACTOR} && env
+      - name: test context variable
+        run: echo ${{ github }}
 
+#
 #      - name: Login to github docker registry
-#        run: docker login $REGISTRY  -u ${{ secrets.USERNAME }} -p ${{ secrets.GITHUB_TOKEN }}
+#        run: docker login $REGISTRY  -u ${GITHUB_ACTOR} -p ${{ secrets.GITHUB_TOKEN }}
 #
 #      - name: Build the Docker image
-#        run: docker build --tag $REGISTRY/$GITHUB_REPOSITORY/$IMAGE_NAME:$IMAGE_TAG --tag $QUAY_REPO/$IMAGE_NAME:$IMAGE_TAG .
+#        run:  |
+#             docker build --tag $REGISTRY/$GITHUB_REPOSITORY/$IMAGE_NAME:$IMAGE_TAG \
+#                          --tag $REGISTRY/$GITHUB_REPOSITORY/$IMAGE_NAME:$GITHUB_SHA \
+#                          --tag $QUAY_REPO/$IMAGE_NAME:$GITHUB_SHA .
 #
 #      - name: Push image
 #        run: docker push $REGISTRY/$GITHUB_REPOSITORY/$IMAGE_NAME:$IMAGE_TAG
