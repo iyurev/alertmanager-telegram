@@ -5,7 +5,7 @@ env:
   IMAGE_NAME: prombot
   QUAY_REGISTRY: quay.io
   QUAY_ORG: kubernetes-operators
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 on:
   push:
     paths:
@@ -19,7 +19,6 @@ jobs:
 
     - name: Checkout code
       uses: actions/checkout@v2
-
 
     - name: Build and push Docker image to  quay.io registry
       uses: docker/build-push-action@v1
@@ -41,23 +40,4 @@ jobs:
         tag_with_ref: true
         tag_with_sha: true
 
-
-#
-#      - name: Login to github docker registry
-#        run: docker login $REGISTRY  -u ${GITHUB_ACTOR} -p ${{ secrets.GITHUB_TOKEN }}
-#
-#      - name: Build the Docker image
-#        run:  |
-#             docker build --tag $REGISTRY/$GITHUB_REPOSITORY/$IMAGE_NAME:$IMAGE_TAG \
-#                          --tag $REGISTRY/$GITHUB_REPOSITORY/$IMAGE_NAME:$GITHUB_SHA \
-#                          --tag $QUAY_REPO/$IMAGE_NAME:$GITHUB_SHA .
-#
-#      - name: Push image
-#        run: docker push $REGISTRY/$GITHUB_REPOSITORY/$IMAGE_NAME:$IMAGE_TAG
-#
-#      - name: Get quay.io credentials
-#        run: echo -n ${{ secrets.QUAY_DOCKER_CFG }} | base64 -d  > ~/.docker/config.json
-#
-#      - name: Push to quay.io
-#        run: docker push $QUAY_REPO/$IMAGE_NAME:$IMAGE_TAG
 
