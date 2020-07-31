@@ -16,9 +16,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: test context variable
-        run: echo ${{ github }}
-
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
 #
 #      - name: Login to github docker registry
 #        run: docker login $REGISTRY  -u ${GITHUB_ACTOR} -p ${{ secrets.GITHUB_TOKEN }}
