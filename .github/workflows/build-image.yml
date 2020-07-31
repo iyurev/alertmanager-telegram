@@ -3,7 +3,6 @@ name: Build prometheus telegram bot image
 env:
   REGISTRY: docker.pkg.github.com
   IMAGE_NAME: prombot
-  IMAGE_TAG: latest
   QUAY_REPO: quay.io/kubernetes-operators
 on:
   push:
@@ -14,12 +13,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Dump GitHub context
+      - name: Default tag value
         env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
+          IMAGE_TAG: ${GITHUB_REF##*/}
+
+      - name: Setup main tag
+        env:
+          IMAGE_TAG: latest
+        if: ${{ github.ref == 'refs/heads/master' }}
+
+      - name: Check tag name
+        run: echo ${IMAGE_TAG}
 #
 #      - name: Login to github docker registry
 #        run: docker login $REGISTRY  -u ${GITHUB_ACTOR} -p ${{ secrets.GITHUB_TOKEN }}
