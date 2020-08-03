@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: prombot
+  name: prombot
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "prombot.selectorLabels" . | nindent 6 }}
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        {{- include "prombot.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - image:  "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          name: prombot
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          ports:
+            - containerPort: 9087
+              name: webhook
+
+          volumeMounts:
+            - mountPath: /config.yaml
+              subPath: config.yaml
+              name: config
+      volumes:
+        - name: config
+          configMap:
+            name:  config
+
+
+
+
+
+

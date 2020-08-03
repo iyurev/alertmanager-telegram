@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+  labels:
+  {{- include "prombot.labels" . | nindent 4 }}
+
+data:
+  config.yaml: |
+    telegram_token: {{ .Values.bot.token }}
+    #template_path: "template.tmpl"
+    time_zone: "Europe/Moscow"
+    split_token: "|"
+

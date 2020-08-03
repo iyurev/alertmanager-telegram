@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    {{- include "prombot.labels" . | nindent 4 }}
+  name: prombot
+spec:
+  ports:
+    - name: prombot
+      port: {{ .Values.service.port }}
+      protocol: TCP
+      targetPort: webhook
+  selector:
+    {{- include "prombot.selectorLabels" . | nindent 4 }}
+  type: {{ .Values.service.type }}
